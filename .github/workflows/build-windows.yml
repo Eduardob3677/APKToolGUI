@@ -132,12 +132,10 @@ jobs:
     - name: Create Release
       if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ steps.extract_version.outputs.VERSION }}
-        release_name: APK Tool GUI v${{ steps.extract_version.outputs.VERSION }}
+        name: APK Tool GUI v${{ steps.extract_version.outputs.VERSION }}
         body: |
           ## APK Tool GUI v${{ steps.extract_version.outputs.VERSION }}
 
@@ -156,16 +154,7 @@ jobs:
           - GUI para apktool, signapk y zipalign utilities
           - Soporte completo para Android APK
           - Interfaz intuitiva en Windows
+        files: APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip
         draft: false
         prerelease: false
-
-    - name: Upload Release Asset
-      if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip
-        asset_name: APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip
-        asset_content_type: application/zip
+        token: ${{ secrets.GITHUB_TOKEN }}
