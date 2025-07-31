@@ -98,6 +98,10 @@ namespace APKToolGUI
             new FrameworkControlEventHandlers(this);
             new BaksmaliControlEventHandlers(this);
             new SmaliControlEventHandlers(this);
+
+            // Inicializar componentes AAB
+            InitializeAabComponents();
+
             new AdbControlEventHandlers(this);
             new DragDropHandlers(this);
             new ApkinfoControlEventHandlers(this);

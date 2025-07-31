@@ -313,7 +313,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="ApkTool\Adb.cs" />
+    <Compile Include="ApkTool\AabConverter.cs" />
     <Compile Include="ApkTool\Zipalign.cs" />
+    <Compile Include="Handlers\AabControlEventHandlers.cs" />
     <Compile Include="Handlers\AdbControlEventHandlers.cs" />
     <Compile Include="Handlers\ApkinfoControlEventHandlers.cs" />
     <Compile Include="Handlers\BaksmaliControlEventHandlers.cs" />
@@ -507,7 +509,7 @@
   </PropertyGroup>
   <Import Project="..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets" Condition="Exists('..\packages\Costura.Fody.6.0.0\build\Costura.Fody.targets')" />
   <Import Project="..\packages\Fody.6.9.2\build\Fody.targets" Condition="Exists('..\packages\Fody.6.9.2\build\Fody.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

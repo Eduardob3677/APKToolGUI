@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
+  <!--
+    Microsoft ResX Schema
+
     Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
+
+    The primary goals of this format is to allow a simple XML format
+    that is mostly human readable. The generation and parsing of the
+    various data types are done through the TypeConverter classes
     associated with the data types.
-    
+
     Example:
-    
+
     ... ado.net/XML headers & schema ...
     <resheader name="resmimetype">text/microsoft-resx</resheader>
     <resheader name="version">2.0</resheader>
@@ -26,36 +26,36 @@
         <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
         <comment>This is a comment</comment>
     </data>
-                
-    There are any number of "resheader" rows that contain simple 
+
+    There are any number of "resheader" rows that contain simple
     name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
+
+    Each data row contains a name, and value. The row also contains a
+    type or mimetype. Type corresponds to a .NET class that support
+    text/value conversion through the TypeConverter architecture.
+    Classes that don't support this are serialized and stored with the
     mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
+
+    The mimetype is used for serialized objects, and tells the
+    ResXResourceReader how to depersist the object. This is currently not
     extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
+
+    Note - application/x-microsoft.net.object.binary.base64 is the format
+    that the ResXResourceWriter will generate, however the reader can
     read any of the formats listed below.
-    
+
     mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
-    
+
     mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
+    value   : The object must be serialized with
             : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
             : and then encoded with base64 encoding.
 
     mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
+    value   : The object must be serialized into a byte array
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
@@ -542,5 +542,87 @@
   </data>
   <data name="SetLanguageRestartApplication" xml:space="preserve">
     <value />
+  </data>
+  <!-- AAB to APK Conversion Strings -->
+  <data name="AabConverter" xml:space="preserve">
+    <value>AAB to APK</value>
+  </data>
+  <data name="AabConverterDescription" xml:space="preserve">
+    <value>Convert Android App Bundle (AAB) files to APK format</value>
+  </data>
+  <data name="AabInputFile" xml:space="preserve">
+    <value>AAB Input File:</value>
+  </data>
+  <data name="AabOutputDirectory" xml:space="preserve">
+    <value>Output Directory:</value>
+  </data>
+  <data name="AabBrowseInputFile" xml:space="preserve">
+    <value>Browse AAB</value>
+  </data>
+  <data name="AabBrowseOutputDir" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="AabConvert" xml:space="preserve">
+    <value>Convert to APK</value>
+  </data>
+  <data name="AabUseOutputDir" xml:space="preserve">
+    <value>Use custom output directory</value>
+  </data>
+  <data name="AabConversionOptions" xml:space="preserve">
+    <value>Conversion Options</value>
+  </data>
+  <data name="AabConversionMethod" xml:space="preserve">
+    <value>Conversion Method:</value>
+  </data>
+  <data name="AabUseBundletool" xml:space="preserve">
+    <value>Use Bundletool (Recommended)</value>
+  </data>
+  <data name="AabUseManual" xml:space="preserve">
+    <value>Manual Method (Legacy)</value>
+  </data>
+  <data name="AabUseKeystore" xml:space="preserve">
+    <value>Sign with custom keystore</value>
+  </data>
+  <data name="AabKeystorePath" xml:space="preserve">
+    <value>Keystore Path:</value>
+  </data>
+  <data name="AabKeystorePassword" xml:space="preserve">
+    <value>Keystore Password:</value>
+  </data>
+  <data name="AabKeyAlias" xml:space="preserve">
+    <value>Key Alias:</value>
+  </data>
+  <data name="AabKeyPassword" xml:space="preserve">
+    <value>Key Password:</value>
+  </data>
+  <data name="AabBrowseKeystore" xml:space="preserve">
+    <value>Browse</value>
+  </data>
+  <data name="AabConversionStarted" xml:space="preserve">
+    <value>Starting AAB to APK conversion...</value>
+  </data>
+  <data name="AabConversionComplete" xml:space="preserve">
+    <value>AAB to APK conversion completed successfully</value>
+  </data>
+  <data name="AabConversionFailed" xml:space="preserve">
+    <value>AAB to APK conversion failed</value>
+  </data>
+  <data name="AabFileNotSelected" xml:space="preserve">
+    <value>Please select an AAB file</value>
+  </data>
+  <data name="AabFileNotFound" xml:space="preserve">
+    <value>The selected AAB file does not exist</value>
+  </data>
+  <data name="AabInvalidOutputDir" xml:space="preserve">
+    <value>Please select a valid output directory</value>
+  </data>
+  <data name="AabOpenOutputDir" xml:space="preserve">
+    <value>Do you want to open the output directory?</value>
+  </data>
+  <data name="AabBundletoolNotFound" xml:space="preserve">
+    <value>bundletool.jar not found. Please download it and place it in the Tools folder</value>
+  </data>
+  <data name="AabProgress" xml:space="preserve">
+    <value>Progress:</value>
   </data>
 </root>
