@@ -1,0 +1,171 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  release:
+    types: [ published ]
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'Create a release after build'
+        required: false
+        default: true
+        type: boolean
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET Framework
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup NuGet
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-version: 'latest'
+
+    - name: Restore NuGet packages
+      run: nuget restore APKToolGUI.sln
+
+    - name: Build solution
+      run: msbuild APKToolGUI.sln /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath=bin\Release\
+
+    - name: Extract version from AssemblyInfo
+      id: extract_version
+      run: |
+        $assemblyInfoPath = "APKToolGUI\Properties\AssemblyInfo.cs"
+        $content = Get-Content $assemblyInfoPath
+        $versionLine = $content | Where-Object { $_ -match 'AssemblyVersion\("(.+)"\)' }
+        if ($versionLine) {
+          $version = $matches[1]
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "Extracted version: $version"
+        } else {
+          echo "VERSION=1.0.0.0" >> $env:GITHUB_OUTPUT
+          echo "Could not extract version, using default: 1.0.0.0"
+        }
+      shell: pwsh
+
+    - name: Extract changelog for current version
+      id: extract_changelog
+      run: |
+        $changelogPath = "changelog.txt"
+        if (Test-Path $changelogPath) {
+          $content = Get-Content $changelogPath -Encoding UTF8
+          $currentVersionChanges = @()
+          $foundVersion = $false
+
+          foreach ($line in $content) {
+            if ($line -match "^${{ steps.extract_version.outputs.VERSION }}") {
+              $foundVersion = $true
+              continue
+            }
+            if ($foundVersion -and $line -match "^\d+\.\d+\.\d+") {
+              break
+            }
+            if ($foundVersion -and $line.Trim() -ne "") {
+              $currentVersionChanges += $line
+            }
+          }
+
+          if ($currentVersionChanges.Count -gt 0) {
+            $changelog = $currentVersionChanges -join "`n"
+            $changelog = $changelog.Replace('"', '\"')
+            echo "CHANGELOG<<EOF" >> $env:GITHUB_OUTPUT
+            echo $changelog >> $env:GITHUB_OUTPUT
+            echo "EOF" >> $env:GITHUB_OUTPUT
+            echo "Extracted changelog for version ${{ steps.extract_version.outputs.VERSION }}"
+          } else {
+            echo "CHANGELOG=No changelog available for this version." >> $env:GITHUB_OUTPUT
+          }
+        } else {
+          echo "CHANGELOG=No changelog file found." >> $env:GITHUB_OUTPUT
+        }
+      shell: pwsh
+
+    - name: Display extracted information
+      run: |
+        echo "📋 INFORMACIÓN EXTRAÍDA:"
+        echo "🏷️ Versión: ${{ steps.extract_version.outputs.VERSION }}"
+        echo "📝 Changelog encontrado: ${{ steps.extract_changelog.outputs.CHANGELOG != '' }}"
+        echo "🔧 Modo de ejecución: ${{ github.event_name }}"
+        if ("${{ github.event_name }}" -eq "workflow_dispatch") {
+          echo "🚀 Crear release: ${{ inputs.create_release }}"
+        }
+      shell: pwsh
+
+    - name: Copy Tools folder to output
+      run: |
+        if (Test-Path "Tools") {
+          Copy-Item -Path "Tools" -Destination "APKToolGUI\bin\Release\Tools" -Recurse -Force
+        }
+      shell: pwsh
+
+    - name: Create release folder
+      run: |
+        New-Item -ItemType Directory -Path "release" -Force
+        Copy-Item -Path "APKToolGUI\bin\Release\*" -Destination "release\" -Recurse -Force
+      shell: pwsh
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: APKToolGUI-Windows-${{ steps.extract_version.outputs.VERSION }}
+        path: release/
+        retention-days: 30
+
+    - name: Create ZIP for distribution
+      run: |
+        Compress-Archive -Path "release\*" -DestinationPath "APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip"
+      shell: pwsh
+
+    - name: Create Release
+      if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: v${{ steps.extract_version.outputs.VERSION }}
+        release_name: APK Tool GUI v${{ steps.extract_version.outputs.VERSION }}
+        body: |
+          ## APK Tool GUI v${{ steps.extract_version.outputs.VERSION }}
+
+          ### 📦 Descarga
+          Descarga el archivo `APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip` desde los assets de esta release.
+
+          ### 📝 Changelog
+          ${{ steps.extract_changelog.outputs.CHANGELOG }}
+
+          ### 🔧 Instalación
+          1. Descarga el archivo ZIP
+          2. Extrae el contenido en una carpeta
+          3. Ejecuta `APKToolGUI.exe`
+
+          ### ✨ Características
+          - GUI para apktool, signapk y zipalign utilities
+          - Soporte completo para Android APK
+          - Interfaz intuitiva en Windows
+        draft: false
+        prerelease: false
+
+    - name: Upload Release Asset
+      if: (github.ref == 'refs/heads/master' && github.event_name == 'push') || (github.event_name == 'workflow_dispatch' && inputs.create_release)
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip
+        asset_name: APKToolGUI-Windows-v${{ steps.extract_version.outputs.VERSION }}.zip
+        asset_content_type: application/zip
