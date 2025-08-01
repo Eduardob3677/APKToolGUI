@@ -34,7 +34,7 @@ namespace APKToolGUI
         private bool IgnoreOutputDirContextMenu;
         private bool isRunning;
 
-        private string javaPath;
+        internal string javaPath;
 
         private Stopwatch stopwatch = new Stopwatch();
         private string lastStartedDate;
@@ -100,7 +100,7 @@ namespace APKToolGUI
             new SmaliControlEventHandlers(this);
 
             // Inicializar componentes AAB
-            InitializeAabComponents();
+            new AabControlEventHandlers(this);
 
             new AdbControlEventHandlers(this);
             new DragDropHandlers(this);
